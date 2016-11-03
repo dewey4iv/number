@@ -5,15 +5,15 @@ import (
 	"strings"
 )
 
-type NumberType string
+type NType string
 
 const (
-	Int   NumberType = "Int"
-	Float NumberType = "Float"
+	Int   NType = "Int"
+	Float NType = "Float"
 )
 
-func NewNumber(in interface{}) *Number {
-	var n Number
+func New(in interface{}) *N {
+	var n N
 
 	switch in.(type) {
 	case int64:
@@ -39,25 +39,25 @@ func NewNumber(in interface{}) *Number {
 	return &n
 }
 
-type Number struct {
-	t NumberType
+type N struct {
+	t NType
 	i int64
 	f float64
 }
 
-func (n *Number) Type() NumberType {
+func (n *N) Type() NType {
 	return n.t
 }
 
-func (n *Number) Int() int64 {
+func (n *N) Int() int64 {
 	return n.i
 }
 
-func (n *Number) Float() float64 {
+func (n *N) Float() float64 {
 	return n.f
 }
 
-func (n *Number) String() string {
+func (n *N) String() string {
 	if n.t == Int {
 		return strconv.Itoa(int(n.i))
 	}
@@ -69,11 +69,11 @@ func (n *Number) String() string {
 	return "null"
 }
 
-func (n *Number) MarshalJSON() ([]byte, error) {
+func (n *N) MarshalJSON() ([]byte, error) {
 	return []byte(n.String()), nil
 }
 
-func (n *Number) UnmarshalJSON(data []byte) error {
+func (n *N) UnmarshalJSON(data []byte) error {
 	var err error
 
 	if n.i, err = strconv.ParseInt(string(data), 10, 64); err != nil {
