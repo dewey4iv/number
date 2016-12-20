@@ -79,18 +79,18 @@ func (n *N) MarshalJSON() ([]byte, error) {
 func (n *N) UnmarshalJSON(data []byte) error {
 	var err error
 
-	if n.i, err = strconv.ParseInt(string(data), 10, 64); err != nil {
-		return err
-	}
-
 	if n.f, err = strconv.ParseFloat(string(data), 64); err != nil {
 		return err
 	}
 
 	if strings.Contains(string(data), ".") {
 		n.t = Float
+		n.i = int64(n.f)
 	} else {
 		n.t = Int
+		if n.i, err = strconv.ParseInt(string(data), 10, 64); err != nil {
+			return err
+		}
 	}
 
 	return nil
