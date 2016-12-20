@@ -1,6 +1,7 @@
 package number
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
@@ -91,4 +92,16 @@ func (n *N) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+func (n *N) MarshalRQL() (interface{}, error) {
+	return n.MarshalJSON()
+}
+
+func (n *N) UnmarshalRQL(data interface{}) error {
+	if b, ok := data.([]byte); ok {
+		return n.UnmarshalJSON(b)
+	}
+
+	return errors.New("???")
 }
