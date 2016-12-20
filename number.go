@@ -33,6 +33,8 @@ func New(in interface{}) *N {
 		n.t = Float
 		n.f = float64(in.(float32))
 		n.i = int64(n.f)
+	case string:
+		n.UnmarshalJSON([]byte(in.(string)))
 	default:
 		return nil
 	}
@@ -95,13 +97,13 @@ func (n *N) UnmarshalJSON(data []byte) error {
 }
 
 func (n *N) MarshalRQL() (interface{}, error) {
-	return n.MarshalJSON()
+	return n.String(), nil
 }
 
-func (n *N) UnmarshalRQL(data interface{}) error {
-	if b, ok := data.([]byte); ok {
-		return n.UnmarshalJSON(b)
+func (n *N) UnmarshalRQL(in interface{}) error {
+	if str, ok := in.(string); ok {
+		return n.UnmarshalJSON([]byte(str))
 	}
 
-	return errors.New("???")
+	return errors.New("UNABLE TO UNMARSHAL RQL")
 }
